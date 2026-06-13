@@ -13,7 +13,7 @@ A lightweight Tampermonkey script that automatically bypasses the annoying "Are 
 2. Click on the Tampermonkey extension icon and select **Dashboard**.
 3. Go to the **Utilities** tab and paste the raw URL of the script, or simply click the link below:
    
-   👉 **[Install the Script](link_to_raw_script_here)** *(Note: Replace this link with the "Raw" file link from your GitHub repo once uploaded).*
+   👉 **[Install the Script](https://github.com/jenishmangukiya/yt-music-anti-pause/raw/refs/heads/main/yt-music-anti-pause.user.js)** 
 
 4. Click **Install** when Tampermonkey prompts you.
 5. Refresh your YouTube Music tab.
