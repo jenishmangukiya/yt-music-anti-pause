@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Music Anti-Pause
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      2.0
 // @description  Automatically clicks the "Are you still listening?" prompt on YouTube Music.
 // @author       Jenish Mangukiya
 // @match        https://music.youtube.com/*
@@ -11,24 +11,39 @@
 
 (function() {
     'use strict';
+    console.log('[AutoContinue] Script loaded');
 
-    setInterval(function() {
-        const youThereRenderer = document.querySelector('ytmusic-you-there-renderer');
-        const confirmButton = document.querySelector('ytmusic-you-there-renderer .yt-button-renderer') || 
-                              document.querySelector('tp-yt-paper-dialog yt-button-renderer[dialog-confirm]');
-
-        if (confirmButton && confirmButton.offsetParent !== null) { 
-            confirmButton.click();
-            console.log("Anti-Pause: Automatically clicked 'Continue listening'.");
-            
-            setTimeout(() => {
-                const video = document.querySelector('video');
-                const playButton = document.querySelector('#play-pause-button');
-                if (video && video.paused && playButton) {
-                    playButton.click();
-                    console.log("Anti-Pause: Resumed playback.");
-                }
-            }, 500);
+    function clickYT() {
+        const btn = document.querySelector('.ytp-keep-playing-button.ytp-button');
+        if (btn) {
+            console.log('[AutoContinue] Clicked YouTube continue');
+            btn.click();
         }
-    }, 5000); 
+    }
+
+    function clickYTMusic() {
+        document.querySelectorAll('ytmusic-you-there-renderer button').forEach(btn => {
+            if (/yes/i.test(btn.innerText.trim())) {
+                console.log('[AutoContinue] Clicked YT Music continue');
+                btn.click();
+            }
+        });
+    }
+
+    function checkContinue() {
+        clickYT();
+        clickYTMusic();
+    }
+
+    const observer = new MutationObserver(checkContinue);
+    observer.observe(document.body, {childList: true, subtree: true});
+
+    setInterval(checkContinue, 3000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden' || document.visibilityState === 'visible') {
+            console.log('[AutoContinue] Visibility changed → ' + document.visibilityState);
+            checkContinue();
+        }
+    });
 })();
